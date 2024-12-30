@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "django-mini-project"
+version = "0.1.0"
+description = "python django project"
+authors = ["jsduek <jsduek28@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+django = "^5.1.4"
+djangorestframework = "^3.15.2"
+psycopg2 = "^2.9.10"
+psycopg2-binary = "^2.9.10"
+
+
+[tool.poetry.group.dev.dependencies]
+drf-yasg = "^1.21.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
