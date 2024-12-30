@@ -1,0 +1,2 @@
+# miniproject
+django mini project
