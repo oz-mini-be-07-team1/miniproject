@@ -23,9 +23,9 @@ jobs:
           - 5432:5432
         env:
         # Github Secrets에서 가져와서 env로 등록, Postgres 데이터 베이스 연결 설정
-          #POSTGRES_USER: ${{ secrets.PG_USER }}
-          #POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          #POSTGRES_DB: ${{ secrets.PG_NAME }}
+          POSTGRES_USER: ${{ secrets.PG_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.PG_NAME }}
         options: >-
           --health-cmd="pg_isready -h 127.0.0.1 -U ${{ secrets.PG_USER }}"
           --health-interval=10s
