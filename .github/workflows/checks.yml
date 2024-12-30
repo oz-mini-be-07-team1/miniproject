@@ -1,8 +1,5 @@
 name: Code Quality Checks
 
-# 트리거 이벤트
-# 코드가 푸시되거나 풀 리퀘스트가 생성될 때 CI가 실행됩니다.
-
 on:
   push:
     branches:
@@ -11,78 +8,66 @@ on:
 
 jobs:
   ci:
-  # 가장 최신버젼의 ubuntu를 OS 환경으로 설정합니다.
     name: Django CI Pipeline
     runs-on: ubuntu-latest
 
-    # PostgreSQL 서비스 설정
     services:
       postgres:
         image: postgres:14
         ports:
           - 5432:5432
         env:
-        # Github Secrets에서 가져와서 env로 등록, Postgres 데이터 베이스 연결 설정
-          POSTGRES_USER: ${{ secrets.PG_USER }}
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
           POSTGRES_DB: ${{ secrets.PG_NAME }}
         options: >-
-          --health-cmd="pg_isready -h 127.0.0.1 -U ${{ secrets.PG_USER }}"
+          --health-cmd="pg_isready -h 127.0.0.1 -U postgres"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     env:
-      DATABASE_URL: postgres://${{ secrets.PG_USER }}:${{ secrets.PG_PASSWORD }}@127.0.0.1:5432/${{ secrets.PG_NAME }}
+      DATABASE_URL: postgres://postgres:${{ secrets.PG_PASSWORD }}@127.0.0.1:5432/${{ secrets.PG_NAME }}
       DJANGO_SETTINGS_MODULE: myproject.settings
       PYTHONUNBUFFERED: 1
 
     steps:
-      # 1. 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Python 환경 설정
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
-      # 3. Poetry 설치
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          echo "${HOME}/.local/bin" >> $GITHUB_PATH
+          echo "${HOME}/.local/bin" >> $GITHUB_ENV
 
-      # 4. 의존성 패키지 설치
       - name: Install Packages & Libraries
         run: |
           poetry install --with ci
 
-      # 5. isort 검사 (Import 정렬 체크)
       - name: Run isort (Import sorting)
         run: |
           poetry run isort . --check --diff
 
-      # 6. black 검사 (코드 스타일 검사)
       - name: Run black (Code formatting)
         run: |
           poetry run black . --check
 
-      # 7. PostgreSQL 연결 대기
       - name: Wait for PostgreSQL
         run: |
-          until pg_isready -h 127.0.0.1 -p 5432 -U ${{ secrets.PG_USER }}; do
+          until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do
             echo "Waiting for PostgreSQL..."
             sleep 1
           done
 
-      # 8. Django 마이그레이션
       - name: Run Django Migrations
         run: |
           poetry run python manage.py migrate
 
-      # 9. Django 테스트 실행
       - name: Run Django Tests
         run: |
           poetry run python manage.py test
