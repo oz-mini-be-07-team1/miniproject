@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "django-mini-project"
 version = "0.1.0"
-description = "python django project"
-authors = ["jsduek <jsduek28@gmail.com>"]
+description = ""
+authors = ["oz"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

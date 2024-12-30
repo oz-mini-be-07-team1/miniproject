@@ -140,3 +140,15 @@ GitHub.sublime-settings
 
 # macOS에서 생성되는 파일
 .DS_Store
+
+# Poetry specific files
+.poetry/
+*.lock
+
+# Poetry 가상환경 (기본 .venv 폴더)
+.venv/
+
+# Python 캐시 파일
+__pycache__/
+*.pyc
+
