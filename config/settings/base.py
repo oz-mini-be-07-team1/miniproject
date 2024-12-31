@@ -42,8 +42,10 @@ DJANGO_SYSTEM_APPS = [
 CUSTOM_USER_APPS = [
     'rest_framework',
     'users.apps.UsersConfig', # user model 추가
-    'notifications.apps.NotificationsConfig',
-    'transaction_history.apps.Transaction_historyConfig',
+    'notifications.apps.NotificationConfig',
+    'transaction_history.apps.TransactionHistoryConfig',
+    'analysis.apps.AnalysisConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_SYSTEM_APPS + CUSTOM_USER_APPS
