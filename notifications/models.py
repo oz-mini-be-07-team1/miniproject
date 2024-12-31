@@ -1,7 +1,6 @@
 from django.db import models
 from common.models import CommonModel
-
-User = get_user_model()
+from users.models import User
 
 # Create your models here.
 class Notification(CommonModel):

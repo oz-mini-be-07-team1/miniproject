@@ -13,7 +13,7 @@ class Analysis(CommonModel):
     user = models.ForeignKey(
         'users.User',
         on_delete=models.CASCADE,
-        related_name='accounts'
+        related_name='analysis'
     )
 
     analysis_target = models.CharField(

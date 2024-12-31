@@ -1,6 +1,7 @@
 from django.db import models
 from common.models import CommonModel
 from .choices import TRANSACTION_TYPE,TRANSACTION_METHOD
+from accounts.models import Account
 
 # Create your models here.
 
