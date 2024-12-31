@@ -41,6 +41,7 @@ DJANGO_SYSTEM_APPS = [
 
 CUSTOM_USER_APPS = [
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'users.apps.UsersConfig', # user model 추가
     'notifications.apps.NotificationConfig',
     'transaction_history.apps.TransactionHistoryConfig',
@@ -49,6 +50,22 @@ CUSTOM_USER_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_SYSTEM_APPS + CUSTOM_USER_APPS
+
+# 기본 인증 방식 설정
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),  # 토큰 수명
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),     # 토큰 수명
+    "ROTATE_REFRESH_TOKENS": True,                   # 토큰이 사용될 때마다 새로운 토큰 발급 / 기존 토큰은 만료 된다 -> 보안성 증가
+    "BLACKLIST_AFTER_ROTATION": True,                # 위 기능으로 회전 후 사용되었던 토큰은 블랙리스트에 추가하여 사용불가하게 만든다 -> 유출시 보안성을 확보할 수 있따.
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
