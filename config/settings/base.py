@@ -41,6 +41,7 @@ DJANGO_SYSTEM_APPS = [
 
 CUSTOM_USER_APPS = [
     'rest_framework',
+    'users.apps.UsersConfig', # user model 추가
 ]
 
 INSTALLED_APPS = DJANGO_SYSTEM_APPS + CUSTOM_USER_APPS
