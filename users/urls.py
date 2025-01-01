@@ -10,7 +10,7 @@ def users_root(request):
             "/users/signup/",
             "/users/login/",
             "/users/logout/",
-            "/users/info/<int:pk>/"
+            "/info/<int:pk>/"
         ]
     })
 
@@ -19,5 +19,5 @@ urlpatterns = [
     path("signup/", SignUpAPIView.as_view(), name="signup"),
     path("login/", LoginAPIView.as_view(), name="login"),
     path("logout/", LogoutAPIView.as_view(), name="logout"),
-    path("info/<int:pk>/", UserInfoAPIView.as_view(), name="user_info"),
+    path('info/<int:pk>/', UserInfoAPIView.as_view(), name='user-info'),
 ]

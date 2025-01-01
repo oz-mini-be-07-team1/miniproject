@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password, check_password
 
 # 회원가입
-class RegisterSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer): 
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -25,11 +26,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User(
             email=validated_data['email'],
             name=validated_data['name'],
-            nickname=validated_data['nickname'],
+            nickname=validated_data.get('nickname', 'anonymous'),
             phone_number=validated_data['phone_number'],
+            password=make_password(validated_data['password']),
         )
 
-        user.set_password(validated_data['password'])
         user.save()
         return user
 
@@ -39,10 +40,15 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(email=data['email'], password=data['password'])
-        if not user:
+        try:
+            user = User.objects.get(email=data['email'])  # 이메일로 사용자 검색
+        except User.DoesNotExist:
             raise serializers.ValidationError("이메일 또는 비밀번호가 잘못되었습니다.")
-        return user
+
+        if not check_password(data['password'], user.password):  # 비밀번호 검증
+            raise serializers.ValidationError("이메일 또는 비밀번호가 잘못되었습니다.")
+
+        return user # 검증된 사용자 반환
     
 # 회원 정보
 class UserSerializer(serializers.ModelSerializer):

@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-#s$jm1o4u=-n&ren5am$3zjm241j32x_6hiyk9d=8798ubj2c2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*'] # 수정
 
 # Application definition
 
@@ -41,7 +40,7 @@ DJANGO_SYSTEM_APPS = [
 
 CUSTOM_USER_APPS = [
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_simplejwt.token_blacklist', # 오류로 기능 off 제거 필요
     'users.apps.UsersConfig', # user model 추가
     'notifications.apps.NotificationConfig',
     'transaction_history.apps.TransactionHistoryConfig',
@@ -51,20 +50,12 @@ CUSTOM_USER_APPS = [
 
 INSTALLED_APPS = DJANGO_SYSTEM_APPS + CUSTOM_USER_APPS
 
+
 # 기본 인증 방식 설정
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-}
-
-from datetime import timedelta
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),  # 토큰 수명
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),     # 토큰 수명
-    "ROTATE_REFRESH_TOKENS": True,                   # 토큰이 사용될 때마다 새로운 토큰 발급 / 기존 토큰은 만료 된다 -> 보안성 증가
-    "BLACKLIST_AFTER_ROTATION": True,                # 위 기능으로 회전 후 사용되었던 토큰은 블랙리스트에 추가하여 사용불가하게 만든다 -> 유출시 보안성을 확보할 수 있따.
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'users.authentication.CookieJWTAuthentication',  # 쿠키 기반 인증 클래스(수정)
+    ]
 }
 
 MIDDLEWARE = [
@@ -154,3 +145,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User' # 추가
+
+from datetime import timedelta # 추가
+
+### 추가
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'user_id',
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ALGORITHM": "HS256",  # 토큰 생성에 사용할 알고리즘
+    "SIGNING_KEY": SECRET_KEY,  # Django의 SECRET_KEY와 동일하게 설정
+}
+### 추가
