@@ -12,7 +12,7 @@ class TransactionHistory(CommonModel):
     transaction_details = models.CharField(max_length=100)
     transaction_type = models.CharField(max_length=10)
     transaction_method = models.CharField(max_length=10, blank=True)
-    transaction_date = models.DateTimeField()
+    transaction_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.account} - {self.transaction_type} - {self.transaction_amount}"
