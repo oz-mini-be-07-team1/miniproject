@@ -46,6 +46,7 @@ CUSTOM_USER_APPS = [
     'transaction_history.apps.TransactionHistoryConfig',
     'analysis.apps.AnalysisConfig',
     'accounts.apps.AccountsConfig',
+    'rest_framework.authtoken'
 ]
 
 INSTALLED_APPS = DJANGO_SYSTEM_APPS + CUSTOM_USER_APPS
@@ -54,9 +55,14 @@ INSTALLED_APPS = DJANGO_SYSTEM_APPS + CUSTOM_USER_APPS
 # 기본 인증 방식 설정
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'users.authentication.CookieJWTAuthentication',  # 쿠키 기반 인증 클래스(수정)
-    ]
+        'rest_framework.authentication.TokenAuthentication', # Token 인증 사용
+        'users.authentication.CookieJWTAuthentication', # 쿠키 기반 인증 클래스(수정)
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근
+    ],
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -153,7 +159,7 @@ from datetime import timedelta # 추가
 ### 추가
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'user_id',
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ALGORITHM": "HS256",  # 토큰 생성에 사용할 알고리즘
     "SIGNING_KEY": SECRET_KEY,  # Django의 SECRET_KEY와 동일하게 설정
