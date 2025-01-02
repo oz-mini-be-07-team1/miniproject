@@ -42,8 +42,8 @@ CUSTOM_USER_APPS = [
     'rest_framework',
     # 'rest_framework_simplejwt.token_blacklist', # 오류로 기능 off 제거 필요
     'users.apps.UsersConfig', # user model 추가
-    'notifications.apps.NotificationConfig',
-    'transaction_history.apps.TransactionHistoryConfig',
+    'notifications',
+    'transaction_history',
     'analysis.apps.AnalysisConfig',
     'accounts.apps.AccountsConfig',
     'rest_framework.authtoken'

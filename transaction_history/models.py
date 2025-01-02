@@ -6,6 +6,7 @@ from accounts.models import Account
 # Create your models here.
 
 class TransactionHistory(CommonModel):
+    transaction_id = models.AutoField(primary_key=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transaction')
     transaction_amount = models.DecimalField(max_digits=18, decimal_places=2)
     post_transaction_balance = models.DecimalField(max_digits=18, decimal_places=2)

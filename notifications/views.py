@@ -8,9 +8,11 @@ class NotificationListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        # 현재 사용자의 알림만 조회
         return Notification.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
+        # 알림 생성 시 사용자 자동 설정
         serializer.save(user=self.request.user)
 
 # 알림 상세 조회 및 삭제
