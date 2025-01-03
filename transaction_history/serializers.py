@@ -4,5 +4,11 @@ from .models import TransactionHistory
 class TransactionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionHistory
-        fields = '__all__'
-        read_only_fields = ('account', 'post_transaction_balance', 'transaction_date')
+        fields = [
+            'transaction_id', 'account', 'transaction_amount',
+            'transaction_type', 'transaction_method', 'post_transaction_balance',
+            'transaction_date', 'transaction_details'
+        ]
+        read_only_fields = [
+            'transaction_id', 'post_transaction_balance', 'transaction_date'
+        ]
